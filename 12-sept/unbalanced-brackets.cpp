@@ -30,7 +30,7 @@ char peek(struct stack &s)
         return s.elements[s.top];
 }
 int fix(string &x,struct stack &s,int index){
-    if(index==x.length()-1){
+    if(index==x.length()){
         return 0;
     }
     char c = x[index];
@@ -62,8 +62,7 @@ int check(int result, string &x, struct stack &s)
     if (peek(s) != '!')
     {
         result++;
-        pop(s);
-        push(s,'}');
+        push(s,pop(s)=='}'?'{':'}');
     }
     while (peek(s) != '!')
     {
@@ -76,7 +75,7 @@ int check(int result, string &x, struct stack &s)
     return result;
 }
 int main(){
-    string brackets = "}{";
+    string brackets = "{{{{{{";
     struct stack s;
     s.top = -1;
     s.size = 15;

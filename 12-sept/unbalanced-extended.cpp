@@ -80,6 +80,23 @@ int find_corresponding_open(char close, stack &s)
         return -1;
     }
 }
+void optimized_reverse(stack &s){
+    struct stack temp;
+    temp.size = s.size;
+    temp.top = -1;
+    while(peek(s)!='!'){
+        push(temp, pop(s));
+    }
+    char last_one = peek(temp);
+    if (close_index(last_one)=='!')
+    {
+        push(s, pop(temp));
+    }
+    push(s, get_corrsponding_open(pop(temp)));
+    while(peek(temp)!='!'){
+        push(s, pop(temp));
+    }
+}
 int fix(string &x, struct stack &s, int index)
 {
     if (index == x.length() - 1)
@@ -94,8 +111,8 @@ int fix(string &x, struct stack &s, int index)
     else
     {
         char close = close_index(c);
-
-        if (find_corresponding_open(close,s)==-1)
+        int found = find_corresponding_open(close, s);
+        if (found== -1)
         {
             char open = get_corrsponding_open(close);
             push(s, open);
@@ -118,9 +135,11 @@ int check(int result, string &x, struct stack &s)
     if (peek(s) != '!')
     {
         result++;
-        //pop until you find an unmatched open or close symbol and then reverse it
+        // pop until you find an unmatched open or close symbol and then reverse it
         char close = pop(s);
         push(s, get_corrsponding_open(close));
+        // implement such that the last one is reversed if it is a closed one else last but one if it is closed
+        // optimized_reverse(s);
     }
     while (peek(s) != '!')
     {
@@ -134,7 +153,7 @@ int check(int result, string &x, struct stack &s)
 }
 int main()
 {
-    string brackets = "{<(][}){}>}}((>>";
+    string brackets = "<<<<<<";
     struct stack s;
     s.top = -1;
     s.size = 15;
